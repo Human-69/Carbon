@@ -16,3 +16,4 @@ vendor/glm/CMakeLists.txt
 /vendor/glm/doc
 /vendor/glm/cmake
 /vendor/glm/util
+vendor/glm/test/
