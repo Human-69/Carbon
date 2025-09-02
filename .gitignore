@@ -8,5 +8,11 @@ Makefile
 /Carbon/res
 /Dependencies/GLEW/doc
 /Dependencies/GLEW/bin
-/vendor/glm/*
-!/vendor/glm/glm/*
+
+
+vendor/glm/.appveyor.yml
+vendor/glm/.travis.yml
+vendor/glm/CMakeLists.txt
+/vendor/glm/doc
+/vendor/glm/cmake
+/vendor/glm/util
