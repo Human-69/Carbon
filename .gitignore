@@ -1,0 +1,12 @@
+.vs/
+.git/
+bin/
+obj/
+x64/
+Carbon.make
+Makefile
+/Carbon/res
+/Dependencies/GLEW/doc
+/Dependencies/GLEW/bin
+/vendor/glm/*
+!/vendor/glm/glm/*
