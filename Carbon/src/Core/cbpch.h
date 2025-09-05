@@ -9,8 +9,6 @@
 #include <sstream>
 #include <iostream>
 
-#include <assert.h>
-#define GLM_FORCE_ASSERT
 /* glm */
 #include <glm.hpp>
 #include <gtx/quaternion.hpp>
@@ -18,3 +16,5 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include <gtx/normal.hpp>
+
+#include "cb_assert.h"
