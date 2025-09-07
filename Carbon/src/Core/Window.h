@@ -1,8 +1,6 @@
 #pragma once
-
-#include "cbpch.h"
 #include "Events/Event.h"
-#include <GLFW/glfw3.h>
+#include <string>
 
 namespace Carbon {
 
@@ -11,29 +9,24 @@ namespace Carbon {
 	class Window
 	{
 	public:
+
+		Window() = default;
+
 		/// <summary>
-		/// Creates a new window and a new OpenGL context
+		/// Creates a new window and a new graphics context
 		/// </summary>
 		/// <param name="width"></param>
 		/// <param name="height"></param>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		static Window CreateWindow(int width=1920,
+		Window* CreateWindow(int width = 1920,
 								   int height=1080,
 								   std::string name="Carbon");
 
-		int GetWidth();
-		int GetHeight();
+		virtual void SwapBuffers() = 0;
+		virtual bool ShouldWindowClose() = 0;
 
-	private:
-		GLFWwindow* window;
-
-		struct WindowData
-		{
-			int width;
-			int height;
-			std::string name;
-			EventCallbackFn eventCallback;
-		};
+		virtual int GetWidth() = 0;
+		virtual int GetHeight() = 0;
 	};
 }

@@ -1,10 +1,11 @@
 #pragma once
-#include "cbpch.h"
+
+#include <iostream>
 
 #ifdef DEBUG
-#if defined(_MSC_VER)
+#if defined(_WIN32)
 #define CB_DEBUG_BREAK() __debugbreak()
-#elif defined(__GNUC__) || defined(__clang__)
+#elif defined(__linux__)
 #include <signal.h>
 #define CB_DEBUG_BREAK() raise(SIGTRAP)
 #else

@@ -26,7 +26,7 @@ project "Carbon"
       links {"GLEW", "glfw", "GL" }
 
    filter "system:windows"
-      links {"glew32s", "glfw3", "opengl32", "user32", "gdi32", "shell32", "kernel32" }
+      links {"glew32", "glfw3", "opengl32", "user32", "gdi32", "shell32", "kernel32" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
@@ -35,3 +35,4 @@ project "Carbon"
    filter "configurations:Release"
       defines { "NDEBUG" }
       optimize "On"
+

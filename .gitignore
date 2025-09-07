@@ -5,6 +5,7 @@ obj/
 x64/
 Carbon.make
 Makefile
+*.make
 /Carbon/res
 /Dependencies/GLEW/doc
 /Dependencies/GLEW/bin

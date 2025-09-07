@@ -1,10 +1,7 @@
 #pragma once
-#include "cbglpch.h"
-
 #include "Types.h"
 
-/* glfw */
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 namespace Carbon::GL
 {

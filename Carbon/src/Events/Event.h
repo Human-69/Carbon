@@ -1,7 +1,5 @@
 #pragma once
 
-#include "cbpch.h"
-
 namespace Carbon 
 {
 

@@ -1,4 +1,9 @@
 #include "Shader.h"
+#include "cbpch.h"
+
+/* opengl */
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 std::string dumpStream(std::ifstream& stream)
 {

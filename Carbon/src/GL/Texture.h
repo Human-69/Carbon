@@ -1,20 +1,21 @@
 #pragma once
-#include "cbglpch.h"
-
 #include "Types.h"
 
 #include <stb_image.h>
+#include <string>
+#include <vector>
+#include "cb_assert.h"
 
 /* opengl */
 #include <GL/glew.h>
 
 #define GL_FIND_ERROR() \
 	do { \
-        GLenum err; \
-        while((err = glGetError()) != GL_NO_ERROR) { \
-            fprintf(stderr, "OpenGL error %d in file %s at line %d\n", err, __FILE__, __LINE__); \
-        } \
-    } while(0)
+		GLenum err; \
+		while((err = glGetError()) != GL_NO_ERROR) { \
+			fprintf(stderr, "OpenGL error %d in file %s at line %d\n", err, __FILE__, __LINE__); \
+		} \
+	} while(0)
 
 namespace Carbon::GL {
 	/// <summary>
@@ -67,7 +68,7 @@ namespace Carbon::GL {
 			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			GL_FIND_ERROR();
 
-			_ASSERT(data);
+			CB_ASSERT(data);
 
 			glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 			GL_FIND_ERROR();

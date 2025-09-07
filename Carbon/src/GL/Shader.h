@@ -1,11 +1,5 @@
 #pragma once
-#include "cbglpch.h"
-
 #include "Types.h"
-
-/* opengl */
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 /* carbon */
 #include "Material.h"

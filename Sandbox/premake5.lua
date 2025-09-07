@@ -5,20 +5,21 @@ project "Sandbox"
    kind "ConsoleApp"
    language "C++"
    cppdialect "C++20" 
-   targetdir "bin/%{cfg.buildcfg}"
+   targetdir "../x64/%{cfg.buildcfg}"
 
    files { "src/**.h", "src/**.cpp", "src/**.hpp" }
-   includedirs {"../CarbonCore/src" , "../CarbonGL/src", "src", "../vendor/glm/glm" }
-   libdirs { "lib" }
+   includedirs {"../Carbon/src", "../Carbon/src/Core", "src", "../vendor/glm/glm", "../vendor/include", "../Dependencies/GLEW/include", "../Dependencies/GLFW/include" }
+   libdirs { "lib", "../Dependencies/GLEW/lib/Release/x64" }
 
    filter { "system:windows", "action:gmake" }
       buildoptions { "-m64" }
       linkoptions  { "-m64" }
+      libdirs {"../Dependencies/GLFW/lib-g++"}
 
    filter "toolset:gcc or toolset:clang"
     buildoptions { "-w", "-Wfatal-errors" }
 
-    links {"CarbonCore", "CarbonGL", "user32", "gdi32", "shell32", "kernel32" }
+    links {"Carbon", "glew32", "glfw3", "opengl32", "user32", "gdi32", "shell32", "kernel32" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }

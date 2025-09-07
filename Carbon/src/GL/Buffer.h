@@ -1,6 +1,4 @@
 #pragma once
-#include "cbglpch.h"
-
 #include "Types.h"
 
 /* opengl */

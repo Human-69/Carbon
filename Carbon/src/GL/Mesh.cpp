@@ -1,4 +1,9 @@
 #include "Mesh.h"
+#include "cbpch.h"
+
+/* opengl */
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 namespace Carbon::GL
 {
