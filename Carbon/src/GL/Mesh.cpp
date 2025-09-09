@@ -8,7 +8,7 @@
 namespace Carbon::GL
 {
 
-	Mesh::Mesh(Shader* shader)
+	Mesh::Mesh(Ref<Shader> shader)
 	{
 		vertexCount = 0;
 		indexCount = 0;
@@ -23,6 +23,9 @@ namespace Carbon::GL
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 		glEnableVertexAttribArray(0);
 
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+		glEnableVertexAttribArray(1);
+
 		glBindVertexArray(0);
 		VBO->Unbind();
 		IBO->Unbind();
@@ -30,7 +33,7 @@ namespace Carbon::GL
 		this->shader = shader;
 	}
 
-	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint>& indices, Shader* shader)
+	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint>& indices, Ref<Shader> shader)
 	{
 		vertexCount = vertices.size();
 		indexCount = indices.size();
@@ -48,6 +51,9 @@ namespace Carbon::GL
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 		glEnableVertexAttribArray(0);
+
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+		glEnableVertexAttribArray(1);
 
 		glBindVertexArray(0);
 		VBO->Unbind();

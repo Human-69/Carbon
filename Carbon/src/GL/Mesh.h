@@ -12,6 +12,7 @@ namespace Carbon::GL
 	struct Vertex
 	{
 		Vector3 position;
+		Vector2 uv;
 	};
 
 	class Mesh
@@ -20,12 +21,12 @@ namespace Carbon::GL
 		/// <summary>
 		/// Carbon::GL::Mesh, generates openGL buffers and leaves them empty
 		/// </summary>
-		Mesh(Shader* shader);
+		Mesh(Ref<Shader> shader);
 
 		/// <summary>
 		/// Carbon::GL::Mesh, generates openGL buffers and loads the data into them
 		/// </summary>
-		Mesh(std::vector<Vertex>& vertices, std::vector<uint>& indices, Shader* shader);
+		Mesh(std::vector<Vertex>& vertices, std::vector<uint>& indices, Ref<Shader> shader);
 
 		/// <summary>
 		/// Carbon::GL::Mesh::LoadData, uploads the given data to the GPU buffers
@@ -45,7 +46,7 @@ namespace Carbon::GL
 		int vertexCount;
 		int indexCount;
 	private:
-		Shader* shader;
+		Ref<Shader> shader;
 		uint VAO;
 		Ref<VertexBuffer> VBO;
 		Ref<IndexBuffer> IBO;

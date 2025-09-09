@@ -18,91 +18,46 @@
 	} while(0)
 
 namespace Carbon::GL {
-	/// <summary>
-	/// A generic texture for storing image data on the GPU
-	/// </summary>
-	/// <typeparam name="target">Can be either GL_TEXTURE_2D or GL_TEXTURE_CUBE_MAP</typeparam>
-	template<int target>
+
+	
+	enum class ImageFormat
+	{
+		R8,
+		RG8,
+		RGB8,
+		RGBA8,
+	};
+
+	struct TextureSpecification
+	{
+		int width;
+		int height;
+		ImageFormat format;
+		bool generateMipMaps = true;
+	};
+
 	class Texture
 	{
 	public:
-		template<int i = target, typename = std::enable_if_t<i == GL_TEXTURE_2D, int>>
-		Texture(std::string texturePath)
-		{
-			stbi_set_flip_vertically_on_load(1);
-			unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, &bpp, 0);
+		
+		virtual int GetWidth() const  = 0;
+		virtual int GetHeight() const = 0;
 
-			std::cout << target << ", ";
+		virtual const TextureSpecification& GetSpecification() = 0;
+		virtual void SetTextureSpecification(TextureSpecification spec) = 0;
 
-			uint format;
+		virtual void SetData(void* data) = 0;
 
-			switch (bpp)
-			{
-			case 1: format = GL_RED; break;
-			case 2: format = GL_RG; break;
-			case 3: format = GL_RGB; break;
-			case 4: format = GL_RGBA; break;
-			default: format = GL_RGB; break;
-			}
-
-			GLenum internalFormat;
-			switch (bpp)
-			{
-			case 1: internalFormat = GL_R8; break;
-			case 2: internalFormat = GL_RG8; break;
-			case 3: internalFormat = GL_RGB8; break;
-			case 4: internalFormat = GL_RGBA8; break;
-			default: internalFormat = GL_RGB8; break;
-			}
-
-			std::cout << bpp << ", " << width << ", " << height << "\n";
-
-			glGenTextures(1, &handle);
-			GL_FIND_ERROR();
-			glBindTexture(target, handle);
-			GL_FIND_ERROR();
-
-			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			GL_FIND_ERROR();
-
-			CB_ASSERT(data);
-
-			glTexImage2D(target, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-			GL_FIND_ERROR();
-			//glGenerateMipmap(target);
-			glBindTexture(target, 0);
-			GL_FIND_ERROR();
-		}
-
-		template<int i = target, typename = std::enable_if_t<i == GL_TEXTURE_CUBE_MAP, int>>
-		Texture(std::vector<std::string> filepaths)
-		{
-
-		}
-
-		void Bind(int slot = 0)
-		{
-			glActiveTexture(GL_TEXTURE0 + slot);
-			glBindTexture(target, handle);
-		}
-
-		void Unbind()
-		{
-			glBindTexture(target, 0);
-		}
-
-	private:
-		uint handle;
-		int width;
-		int height;
-		int bpp;
+		virtual void Bind(uint textureSlot) = 0;
+		virtual void Unbind()				= 0;
 	};
 
-	typedef Texture<GL_TEXTURE_2D> Texture2D;
-	typedef Texture<GL_TEXTURE_CUBE_MAP> TextureCubemap;
 
+	class Texture2D : public Texture
+	{
+	public:
+		static Ref<Texture2D> Create(TextureSpecification spec);
+		static Ref<Texture2D> Create(const std::string& path);
+	};
 }
 

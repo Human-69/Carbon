@@ -12,7 +12,7 @@ namespace Carbon::GL {
 	/// <summary>
 	/// Union of all possible data that can be passed to shaders
 	/// </summary>
-	typedef std::variant<int, float, Vector2, Vector3, Vector4, Matrix4, Texture2D*, TextureCubemap*> UniformValue;
+	typedef std::variant<int, float, Vector2, Vector3, Vector4, Matrix4, Ref<Texture2D>> UniformValue;
 
 	class Material
 	{
