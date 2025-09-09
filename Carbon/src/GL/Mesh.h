@@ -1,5 +1,5 @@
 #pragma once
-#include "Types.h"
+#include <CarbonTypes.h>
 
 /* Carbon::GL */
 #include "Shader.h"
@@ -12,7 +12,6 @@ namespace Carbon::GL
 	struct Vertex
 	{
 		Vector3 position;
-		Vector2 uv;
 	};
 
 	class Mesh
@@ -26,7 +25,7 @@ namespace Carbon::GL
 		/// <summary>
 		/// Carbon::GL::Mesh, generates openGL buffers and loads the data into them
 		/// </summary>
-		Mesh(const std::vector<Vertex>& vertices, const std::vector<uint>& indices, Shader* shader);
+		Mesh(std::vector<Vertex>& vertices, std::vector<uint>& indices, Shader* shader);
 
 		/// <summary>
 		/// Carbon::GL::Mesh::LoadData, uploads the given data to the GPU buffers
@@ -48,7 +47,7 @@ namespace Carbon::GL
 	private:
 		Shader* shader;
 		uint VAO;
-		Buffer<Vertex> VBO = Buffer<Vertex>(GL_ARRAY_BUFFER);
-		Buffer<uint> IBO = Buffer<uint>(GL_ELEMENT_ARRAY_BUFFER);
+		Ref<VertexBuffer> VBO;
+		Ref<IndexBuffer> IBO;
 	};
 }

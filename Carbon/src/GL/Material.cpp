@@ -17,21 +17,21 @@ namespace Carbon::GL
 
 	void Material::SetUniform(const std::string& uniformName, UniformValue uniformValue)
 	{
-		_ASSERT(params.find(uniformName) != params.end());
+		CB_ASSERT(params.find(uniformName) != params.end());
 
 		params[uniformName] = uniformValue;
 	}
 
 	UniformValue Material::GetUniform(const std::string& uniformName)
 	{
-		_ASSERT(params.find(uniformName) != params.end());
+		CB_ASSERT(params.find(uniformName) != params.end());
 
 		return params[uniformName];
 	}
 
 	void Material::RemoveUniform(const std::string& uniformName)
 	{
-		_ASSERT(params.find(uniformName) != params.end());
+		CB_ASSERT(params.find(uniformName) != params.end());
 
 		params.erase(params.find(uniformName));
 	}

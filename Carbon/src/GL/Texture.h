@@ -1,5 +1,5 @@
 #pragma once
-#include "Types.h"
+#include <CarbonTypes.h>
 
 #include <stb_image.h>
 #include <string>

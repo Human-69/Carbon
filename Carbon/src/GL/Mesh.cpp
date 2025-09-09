@@ -16,51 +16,49 @@ namespace Carbon::GL
 		glGenVertexArrays(1, &VAO);
 
 		glBindVertexArray(VAO);
-		VBO.AddAttribPointer(&Vertex::position, 3, GL_FLOAT);
-		VBO.AddAttribPointer(&Vertex::uv, 2, GL_FLOAT);
 
-		VBO.Bind();
-		IBO.Bind();
+		VBO->Bind();
+		IBO->Bind();
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+		glEnableVertexAttribArray(0);
 
 		glBindVertexArray(0);
-		VBO.Unbind();
-		IBO.Unbind();
+		VBO->Unbind();
+		IBO->Unbind();
 
 		this->shader = shader;
 	}
 
-	Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<uint>& indices, Shader* shader)
+	Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<uint>& indices, Shader* shader)
 	{
 		vertexCount = vertices.size();
 		indexCount = indices.size();
+
+		VBO = VertexBuffer::Create(vertices.size() * sizeof(Vertex));
+		VBO->SetData(vertices.data(), vertices.size() * sizeof(Vertex));
+		IBO = IndexBuffer::Create(indices.data(), indices.size() * sizeof(uint));
 
 		glGenVertexArrays(1, &VAO);
 
 		glBindVertexArray(VAO);
 
-		VBO.SetData(vertices);
-		IBO.SetData(indices);
+		VBO->Bind();
+		IBO->Bind();
 
-		VBO.AddAttribPointer(&Vertex::position, 3, GL_FLOAT);
-		VBO.AddAttribPointer(&Vertex::uv, 2, GL_FLOAT);
-
-		VBO.Bind();
-		IBO.Bind();
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+		glEnableVertexAttribArray(0);
 
 		glBindVertexArray(0);
-		VBO.Unbind();
-		IBO.Unbind();
+		VBO->Unbind();
+		IBO->Unbind();
 
 		this->shader = shader;
 	}
 
 	void Mesh::LoadData(const std::vector<Vertex>& vertices, const std::vector<uint>& indices)
 	{
-		vertexCount = vertices.size();
-		indexCount = indices.size();
-
-		VBO.SetData(vertices);
-		IBO.SetData(indices);
+		
 	}
 
 	void Mesh::Render()
@@ -68,8 +66,8 @@ namespace Carbon::GL
 		shader->Bind();
 		
 		glBindVertexArray(VAO);
-
-		shader->SetMatrix4("pv", projectionView);
+		VBO->Bind();
+		IBO->Bind();
 
 		shader->Bind();
 

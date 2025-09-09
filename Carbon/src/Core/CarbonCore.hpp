@@ -7,3 +7,7 @@
 
 /* Windowing */
 #include "Window.h"
+
+
+#include "CarbonTypes.h"
+#include "../GL/CarbonGL.hpp"

@@ -24,7 +24,7 @@ namespace Carbon::GL
 		std::ifstream vsSource(vertexShaderPath);
 		std::ifstream fsSource(fragmentShaderPath);
 
-		_ASSERT(vsSource && fsSource);
+		CB_ASSERT(vsSource && fsSource);
 
 		std::string vertexSource = dumpStream(vsSource);
 		std::string fragmentSource = dumpStream(fsSource);
@@ -127,7 +127,7 @@ namespace Carbon::GL
 				}
 			}, value);
 
-			_ASSERT(texSlot < maxTexSlots);
+			CB_ASSERT(texSlot < maxTexSlots);
 		}
 	}
 
@@ -182,7 +182,8 @@ namespace Carbon::GL
 	uint Shader::GetLocation(const std::string& name)
 	{
 		int loc = glGetUniformLocation(handle, name.c_str());
-		_ASSERT(loc != -1);
+		std::string err = name + " doesn't exist in the shader!";
+		CB_ASSERT_MSG(loc != -1, err);
 		return loc;
 	}
 

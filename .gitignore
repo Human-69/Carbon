@@ -18,3 +18,5 @@ vendor/glm/CMakeLists.txt
 /vendor/glm/cmake
 /vendor/glm/util
 vendor/glm/test/
+/Sandbox/lib
+Sandbox/lib/Carbon.lib
