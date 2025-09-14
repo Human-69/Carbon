@@ -4,7 +4,7 @@
 /* glfw */
 #include <GLFW/glfw3.h>
 
-namespace Carbon::GL
+namespace Carbon::Renderer
 {
 	Camera::Camera(float fov, float nearClipPlane, float farClipPlane, float aspect) : fov(fov), nearClipPlane(nearClipPlane), farClipPlane(farClipPlane), aspectRatio(aspect)
 	{

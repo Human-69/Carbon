@@ -12,7 +12,7 @@ namespace Carbon::GL::OpenGL
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
-		virtual void SetData(void* data, uint size) override;
+		virtual void SetData(const void* data, uint size) override;
 
 		virtual const BufferLayout& GetLayout() const override { return layout; };
 		virtual void SetLayout(const BufferLayout& bufferLayout) override { layout = bufferLayout; };
@@ -30,7 +30,7 @@ namespace Carbon::GL::OpenGL
 		virtual void Bind() override;
 		virtual void Unbind() override;
 
-		virtual void SetData(uint* data, uint size) override;
+		virtual void SetData(const uint* data, uint size) override;
 	private:
 		uint handle;
 	};

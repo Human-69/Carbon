@@ -102,9 +102,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;CARBON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies/GLFW/include;$(SolutionDir)Carbon/src;$(SolutionDir)Dependencies/GLEW/include;$(SolutionDir)Carbon/src/Core;$(SolutionDir)vendor/glm/glm;$(SolutionDir)vendor/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,9 +118,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;CARBON;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Dependencies/GLFW/include;$(SolutionDir)Carbon/src;$(SolutionDir)Dependencies/GLEW/include;$(SolutionDir)Carbon/src/Core;$(SolutionDir)vendor/glm/glm;$(SolutionDir)vendor/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +131,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\LayerStack.h" />
+    <ClInclude Include="src\Core\Layer.h" />
+    <ClInclude Include="src\Core\Application.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
+    <ClInclude Include="src\GL\RenderCommands.h" />
+    <ClInclude Include="src\GL\VertexArray.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Core\cb_assert.h" />
     <ClInclude Include="src\Core\CarbonCore.hpp" />
     <ClInclude Include="src\Core\cbpch.h" />
@@ -137,30 +146,43 @@
     <ClInclude Include="src\Events\KeyEvent.h" />
     <ClInclude Include="src\Core\Window.h" />
     <ClInclude Include="src\GL\Buffer.h" />
-    <ClInclude Include="src\GL\Camera.h" />
+    <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\GL\CarbonGL.hpp" />
     <ClInclude Include="src\GL\Context.h" />
-    <ClInclude Include="src\GL\Material.h" />
-    <ClInclude Include="src\GL\Mesh.h" />
+    <ClInclude Include="src\Renderer\Material.h" />
+    <ClInclude Include="src\Renderer\Mesh.h" />
+    <ClInclude Include="src\GL\RendererAPI.h" />
     <ClInclude Include="src\GL\Shader.h" />
     <ClInclude Include="src\GL\Texture.h" />
-    <ClInclude Include="src\GL\Types.h" />
+    <ClInclude Include="src\Core\CarbonTypes.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Platform\Windows\WindowsWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\LayerStack.cpp" />
+    <ClCompile Include="src\Core\Application.cpp" />
+    <ClCompile Include="src\Core\EntryPoint.h" />
+    <ClCompile Include="src\GL\VertexArray.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\GL\RenderCommands.cpp" />
+    <ClCompile Include="src\GL\Texture.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRenderererAPI.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Core\cbpch.cpp" />
+    <ClCompile Include="src\GL\Buffer.cpp" />
+    <ClCompile Include="src\GL\RendererAPI.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Platform\Windows\WindowsWindow.cpp" />
-    <ClCompile Include="src\GL\Camera.cpp" />
-    <ClCompile Include="src\GL\Material.cpp" />
-    <ClCompile Include="src\GL\Mesh.cpp" />
+    <ClCompile Include="src\Renderer\Camera.cpp" />
+    <ClCompile Include="src\Renderer\Material.cpp" />
+    <ClCompile Include="src\Renderer\Mesh.cpp" />
     <ClCompile Include="src\GL\Shader.cpp" />
     <ClCompile Include="src\GL\stbi_image.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\GL\shader.fragmentShader" />
-    <None Include="src\GL\shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

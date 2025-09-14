@@ -1,7 +1,7 @@
 #include "Material.h"
 #include "cbpch.h"
 
-namespace Carbon::GL
+namespace Carbon::Renderer
 {
 	void Material::AddUniform(const std::string& uniformName, UniformValue uniformValue)
 	{

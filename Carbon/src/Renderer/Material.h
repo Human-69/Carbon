@@ -3,16 +3,18 @@
 #include <unordered_map>
 #include <string>
 
+#include <CarbonTypes.h>
+
 /* carbon */
-#include "Texture.h"
+#include "../GL/Texture.h"
 
 
-namespace Carbon::GL {
+namespace Carbon::Renderer {
 
 	/// <summary>
 	/// Union of all possible data that can be passed to shaders
 	/// </summary>
-	typedef std::variant<int, float, Vector2, Vector3, Vector4, Matrix4, Ref<Texture2D>> UniformValue;
+	typedef std::variant<int, float, Vector2, Vector3, Vector4, Matrix4, Ref<GL::Texture2D>> UniformValue;
 
 	class Material
 	{

@@ -1,10 +1,12 @@
 #pragma once
 #include "Events/Event.h"
 #include <string>
+#include <CarbonTypes.h>
+#include <functional>
 
 namespace Carbon {
 
-	typedef void (*EventCallbackFn)(Event&);
+	typedef std::function<void(Event& e)> EventCallbackFn;
 
 	class Window
 	{
@@ -19,9 +21,11 @@ namespace Carbon {
 		/// <param name="height"></param>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		Window* CreateWindow(int width = 1920,
-								   int height=1080,
-								   std::string name="Carbon");
+		static Scope<Window> Create(int width = 1920,
+									int height=1080,
+									const std::string& name="Carbon");
+
+		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 
 		virtual void SwapBuffers() = 0;
 		virtual bool ShouldWindowClose() = 0;

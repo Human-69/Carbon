@@ -3,7 +3,7 @@
 
 struct GLFWwindow;
 
-namespace Carbon::GL
+namespace Carbon::Renderer
 {
 	/// <summary>
 	/// Carbon::GL::projectionView, the combined matrix of projection and view. Calculated by Carbon::GL::BeginDraw every frame

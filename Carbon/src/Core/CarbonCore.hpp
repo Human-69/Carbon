@@ -8,6 +8,11 @@
 /* Windowing */
 #include "Window.h"
 
+/* Application */
+#include "Application.h"
+
+/* Entry point */
+#include "EntryPoint.h"
 
 #include "CarbonTypes.h"
 #include "../GL/CarbonGL.hpp"

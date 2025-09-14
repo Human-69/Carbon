@@ -77,7 +77,7 @@ namespace Carbon::GL
 			CB_ASSERT_MSG(false, "Unknown datatype!");
 		}
 
-		BufferElement(VertexBufferDatatype datatype, std::string& name, bool normalized = false) : type(datatype), size(GetDatatypeSize(datatype)), offset(0), name(name), normalized(normalized) {};
+		BufferElement(VertexBufferDatatype datatype, const std::string& name, bool normalized = false) : type(datatype), size(GetDatatypeSize(datatype)), offset(0), name(name), normalized(normalized) {};
 	};
 
 	class BufferLayout
@@ -96,7 +96,7 @@ namespace Carbon::GL
 		{
 			int offset = 0;
 			stride = 0;
-			for(auto element : elements)
+			for(auto& element : elements)
 			{
 				element.offset = offset;
 				offset += element.size;
@@ -115,7 +115,7 @@ namespace Carbon::GL
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 
-		virtual void SetData(void* data, uint size) = 0;
+		virtual void SetData(const void* data, uint size) = 0;
 
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& bufferLayout) = 0;
@@ -130,7 +130,7 @@ namespace Carbon::GL
 		virtual void Bind() = 0;
 		virtual void Unbind() = 0;
 
-		virtual void SetData(uint* data, uint size) = 0;
+		virtual void SetData(const uint* data, uint size) = 0;
 
 		static Ref<IndexBuffer> Create(uint* indices, uint size);
 	};

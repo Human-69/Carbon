@@ -28,7 +28,7 @@ namespace Carbon::GL::OpenGL
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void OpenGLVertexBuffer::SetData(void* data, uint size) 
+	void OpenGLVertexBuffer::SetData(const void* data, uint size) 
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, handle);
 		glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
@@ -51,7 +51,7 @@ namespace Carbon::GL::OpenGL
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	void OpenGLIndexBuffer::SetData(uint* data, uint size) 
+	void OpenGLIndexBuffer::SetData(const uint* data, uint size) 
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);

@@ -47,8 +47,8 @@ TARGETDIR = ../x64/Debug
 TARGET = $(TARGETDIR)/Sandbox.exe
 OBJDIR = obj/Debug
 DEFINES += -DDEBUG
-ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -g -m64 -w -Wfatal-errors
-ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -g -std=c++20 -m64 -w -Wfatal-errors
+ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O0 -g -m64 -w -Wfatal-errors
+ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -O0 -g -std=c++20 -m64 -w -Wfatal-errors
 ALL_LDFLAGS += $(LDFLAGS) -Llib -L../Dependencies/GLEW/lib/Release/x64 -L../Dependencies/GLFW/lib-g++ -m64
 
 else ifeq ($(config),release)

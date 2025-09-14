@@ -22,6 +22,11 @@ namespace Carbon
 		glfwSetWindowUserPointer(window, &data);
 	}
 
+	void WindowsWindow::SetEventCallback(const EventCallbackFn& callback)
+	{
+		data.eventCallback = callback;
+	}
+
 	int WindowsWindow::GetWidth()
 	{
 		return data.width;

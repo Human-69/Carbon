@@ -2,7 +2,7 @@
 set configuration=debug
 set makeclean=noclean
 if "%1"=="clean" set makeclean=clean
-if "%2" == "release" set configuration=release 
+if "%2"=="release" set configuration=release 
 echo "==== Compiling Carbon ===="
 
 premake5 gmake
@@ -27,7 +27,8 @@ echo.
 echo "==== Running sandbox ===="
 echo.
 cd ../x64/%configuration%
-Sandbox.exe
+if %configuration%==debug gdb Sandbox.exe
+if %configuration%==release Sandbox.exe
 echo.
 echo "==== Sandbox has exited with code %errorlevel% ===="
 cd ../../../

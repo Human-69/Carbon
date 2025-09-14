@@ -9,6 +9,8 @@ namespace Carbon {
 	public:
 		WindowsWindow(int width = 1920, int height = 1080, std::string name = "Carbon");
 
+		virtual void SetEventCallback(const EventCallbackFn& callback) override;
+
 		virtual int GetWidth() override;
 		virtual int GetHeight() override;
 

@@ -24,6 +24,7 @@ project "Sandbox"
    filter "configurations:Debug"
       defines { "DEBUG" }
       symbols "On"
+      optimize "Off"  
 
    filter "configurations:Release"
       defines { "NDEBUG" }

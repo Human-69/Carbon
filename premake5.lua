@@ -14,6 +14,8 @@ project "Carbon"
    pchheader "cbpch.h"
    pchsource "Carbon/src/core/cbpch.cpp"
 
+   defines {"CARBON"}
+
    filter { "system:windows", "action:gmake" }
       buildoptions { "-m64" }
       linkoptions  { "-m64" }
@@ -22,15 +24,18 @@ project "Carbon"
     buildoptions { "-w", "-Wfatal-errors" }
 
    filter "system:linux"
+      defines {"PLATFORM_LINUX"}
       libdirs { "Dependencies/GLEW-Linux" }
       links {"GLEW", "glfw", "GL" }
 
    filter "system:windows"
+      defines {"PLATFORM_WINDOWS"}
       links {"glew32", "glfw3", "opengl32", "user32", "gdi32", "shell32", "kernel32" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }
       symbols "On"
+      optimize "Off"  
 
    filter "configurations:Release"
       defines { "NDEBUG" }
