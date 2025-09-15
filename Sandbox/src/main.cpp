@@ -49,7 +49,20 @@ public:
 		GL_FIND_ERROR();
 	};
 
-	virtual void OnEvent(Carbon::Event& e) override {};
+	virtual void OnEvent(Carbon::Event& e) override 
+	{
+		Carbon::EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<Carbon::KeyPressed>([this](Carbon::KeyPressed& kp)
+			{
+				std::cout << "Pressed key: " << (char)kp.GetKeycode()<<"\n";
+				return true;
+			});
+		dispatcher.Dispatch<Carbon::KeyReleased>([this](Carbon::KeyReleased& kr)
+			{
+				std::cout << "Released key: " << (char)kr.GetKeycode() << "\n";
+				return true;
+			});
+	};
 
 private:
 	Carbon::Renderer::Mesh m;

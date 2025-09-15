@@ -19,6 +19,7 @@ namespace Carbon {
 
 	private:
 		Scope<Window> window;
+		bool running;
 		void Run();
 		friend int ::main();
 	};

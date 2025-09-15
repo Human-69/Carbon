@@ -1,5 +1,7 @@
 #pragma once
 #include "Events/Event.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/KeyEvent.h"
 #include <string>
 #include <CarbonTypes.h>
 #include <functional>

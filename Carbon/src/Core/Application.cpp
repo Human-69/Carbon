@@ -7,6 +7,7 @@ namespace Carbon
 	{
 		window = Window::Create(1920, 1080, name);
 		window->SetEventCallback([this](Event& e) { this->OnEvent(e); });
+		running = true;
 	}
 
 	Application::~Application()
@@ -16,12 +17,28 @@ namespace Carbon
 
 	void Application::OnEvent(Event& e)
 	{
-		
+		/* Application events */
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>([this](WindowCloseEvent& wce)->bool
+			{
+				running = false;
+				return true;
+			});
+		dispatcher.Dispatch<WindowResizeEvent>([this](WindowResizeEvent& wre)
+			{
+				/* TODO: Actually resize the viewport */
+				return true;
+			});
+
+		/* Input events */
+		//Input events are handled by layers
+		for (Layer* layer : layerStack)
+			layer->OnEvent(e);
 	}
 
 	void Application::Run()
 	{
-		while (!window->ShouldWindowClose()) {
+		while (running) {
 			for (Layer* layer : layerStack)
 			{
 				layer->OnUpdate();

@@ -7,7 +7,7 @@ namespace Carbon
 	{
 		WindowClose, WindowResize,
 		KeyPressed, KeyReleased,
-		MouseButtonPressed, MouseButtonReleased, MouseScroll,
+		MouseButtonPressed, MouseButtonReleased, MouseScroll, MouseMoved
 	};
 
 	enum EventCategory
