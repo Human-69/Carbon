@@ -17,6 +17,10 @@ namespace Carbon {
 		virtual void SwapBuffers() override;
 		virtual bool ShouldWindowClose() override;
 
+		virtual void OnUpdate() override;
+
+		virtual void* GetNativeWindow() override { return window; };
+
 		struct WindowData
 		{
 			int width;
@@ -28,6 +32,6 @@ namespace Carbon {
 	private:
 		WindowData data;
 		GLFWwindow* window;
-		GL::OpenGLContext* context;
+		Scope<GL::OpenGLContext> context;
 	};
 }

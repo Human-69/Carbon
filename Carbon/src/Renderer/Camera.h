@@ -1,5 +1,6 @@
 #pragma once
 #include <CarbonTypes.h>
+#include "Window.h"
 
 struct GLFWwindow;
 
@@ -23,14 +24,15 @@ namespace Carbon::Renderer
 		/// <summary>
 		/// Finishes drawing to the screen, swaps buffers and polls events
 		/// </summary>
-		void EndDraw(GLFWwindow* window);
+		void EndDraw(Window& window);
 
 		Vector3 position = Vector3{ 0, 0, 0 };
+		float fov;
+
 	private:
 		Vector3 forward = Vector3{0, 0, 1};
 		Vector3 up = Vector3{ 0, 1, 0 };
 
-		float fov;
 		float nearClipPlane;
 		float farClipPlane;
 		float aspectRatio;

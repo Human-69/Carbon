@@ -2,6 +2,7 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
+#include "Events/MouseEvent.h"
 #include <string>
 #include <CarbonTypes.h>
 #include <functional>
@@ -34,5 +35,9 @@ namespace Carbon {
 
 		virtual int GetWidth() = 0;
 		virtual int GetHeight() = 0;
+
+		virtual void* GetNativeWindow() = 0;
+
+		virtual void OnUpdate() = 0;
 	};
 }

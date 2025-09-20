@@ -4,6 +4,8 @@
 #include <Platform/Windows/WindowsWindow.h>
 #include "Platform/OpenGL/OpenGLTexture.h"
 
+static Ref<Carbon::Renderer::Camera> cam;
+
 class SimpleLayer : public Carbon::Layer
 {
 public:
@@ -20,7 +22,7 @@ public:
 
 		std::vector<uint> indices = { 2, 1, 0 };
 
-		m = Carbon::Renderer::Mesh(vertices, indices, s);
+		m = CreateRef<Carbon::Renderer::Mesh>(vertices, indices, s);
 
 		GL_FIND_ERROR();
 
@@ -36,7 +38,7 @@ public:
 
 		GL_FIND_ERROR();
 
-		Carbon::GL::RendererCommands::SetClearColor(Color{ 0.25, 1, 0.25, 1 });
+		Carbon::GL::RendererCommands::SetClearColor(Color{ 0.25, 0.25, 0.25, 1 });
 	};
 
 	virtual void OnDetach() override {};
@@ -44,8 +46,9 @@ public:
 	virtual void OnUpdate() override 
 	{
 		Carbon::GL::RendererCommands::Clear();
+		
+		m->Render();
 
-		m.Render();
 		GL_FIND_ERROR();
 	};
 
@@ -55,6 +58,10 @@ public:
 		dispatcher.Dispatch<Carbon::KeyPressed>([this](Carbon::KeyPressed& kp)
 			{
 				std::cout << "Pressed key: " << (char)kp.GetKeycode()<<"\n";
+				if (kp.GetKeycode() == 'W')
+					cam->fov += 5;
+				else if (kp.GetKeycode() == 'S')
+					cam->fov -= 5;
 				return true;
 			});
 		dispatcher.Dispatch<Carbon::KeyReleased>([this](Carbon::KeyReleased& kr)
@@ -65,7 +72,7 @@ public:
 	};
 
 private:
-	Carbon::Renderer::Mesh m;
+	Ref<Carbon::Renderer::Mesh> m;
 };
 
 class SimpleApp : public Carbon::Application
@@ -76,6 +83,7 @@ public:
 		auto sl = new SimpleLayer();
 		sl->OnAttach();
 		layerStack.PushLayer(sl);
+		cam = camera;
 	}
 
 	~SimpleApp()

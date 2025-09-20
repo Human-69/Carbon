@@ -11,6 +11,7 @@ namespace Carbon {
 
 		std::vector<Layer*>::iterator begin() { return layers.begin(); }
 		std::vector<Layer*>::iterator end() { return layers.end(); }
+		uint32_t size() { return layers.size(); };
 	private:
 		std::vector<Layer*> layers;
 	};

@@ -8,7 +8,7 @@ extern Scope<Carbon::Application> CreateApplication(const std::string name);
 int main()
 {
 	std::cout << "Running!\n";
-	Scope<Carbon::Application> Application = CreateApplication("Carbon");
-	Application->Run();
+	Carbon::Application::instance = CreateApplication("Carbon");
+	Carbon::Application::Get().Run();
 	return 0;
 }

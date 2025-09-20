@@ -19,9 +19,6 @@ namespace Carbon::Renderer
 	class Mesh
 	{
 	public:
-
-		Mesh() = default;
-
 		/// <summary>
 		/// Carbon::GL::Mesh, generates openGL buffers and leaves them empty
 		/// </summary>

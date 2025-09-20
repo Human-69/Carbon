@@ -18,9 +18,8 @@ namespace Carbon::Renderer
 		projectionView = projection * view;	
 	}
 
-	void Camera::EndDraw(GLFWwindow* window)
+	void Camera::EndDraw(Window& window)
 	{
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		window.OnUpdate();
 	}
 }

@@ -3,10 +3,14 @@
 
 namespace Carbon
 {
+
+	Scope<Application> Application::instance;
+
 	Application::Application(const std::string name)
 	{
 		window = Window::Create(1920, 1080, name);
 		window->SetEventCallback([this](Event& e) { this->OnEvent(e); });
+		camera = CreateRef<Renderer::Camera>(60, 0.01, 100, 16.0f/9.0f);
 		running = true;
 	}
 
@@ -32,19 +36,34 @@ namespace Carbon
 
 		/* Input events */
 		//Input events are handled by layers
-		for (Layer* layer : layerStack)
-			layer->OnEvent(e);
+		//The top most(last) layers receive events first
+		//Reverse iterate
+		for (int i = (int)layerStack.size() - 1; i >= 0; i--) 
+		{
+			//If the last layer handled the event don't pass it on
+			if (e.handled) break;
+			(*(layerStack.begin() + i))->OnEvent(e);
+		}
 	}
 
 	void Application::Run()
 	{
-		while (running) {
+		while (running) 
+		{
+			Time::OnUpdate();
+			Input::OnBeginFrame();
+
+			camera->BegindDraw();
+
+			//Top most layers(last) render last
+			//Forward iterate
 			for (Layer* layer : layerStack)
 			{
 				layer->OnUpdate();
 			}
-			window->SwapBuffers();
-			glfwPollEvents();
+			
+			window->OnUpdate();
+			Input::OnEndFrame();
 		}
 	}
 }
