@@ -3,6 +3,17 @@ set configuration=debug
 set makeclean=noclean
 if "%1"=="clean" set makeclean=clean
 if "%2"=="release" set configuration=release 
+
+echo "==== Compiling ImGUI ===="
+
+cd vendor\ImGUI
+premake5 gmake
+make config=%configuration% || exit \b
+cd ..\..
+
+echo "==== Done building ImGUI(%configuration%) ===="
+echo.
+
 echo "==== Compiling Carbon ===="
 
 premake5 gmake
@@ -14,7 +25,7 @@ echo.
 
 copy "%~dp0bin\%configuration%\Carbon.lib" "%~dp0Sandbox\lib"
 
-echo "==== Building sandbox ===="
+echo "==== Compiling sandbox ===="
 
 cd Sandbox
 premake5 gmake

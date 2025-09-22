@@ -5,6 +5,8 @@
 #include "Renderer/Camera.h"
 #include "CarbonTypes.h"
 #include "Input.h"
+#include "Scene/Scene.h"
+#include "ImGUI/ImGUILayer.h"
 
 int main();
 
@@ -16,15 +18,18 @@ namespace Carbon {
 		virtual ~Application();
 
 		static Application& Get() { return *instance; }
+		static Scene& GetActiveScene() { return *scene; }
 
 		Window& GetWindow() { return *window; };
 		void OnEvent(Event& e);
 	protected:
 		LayerStack layerStack;
 		Ref<Renderer::Camera> camera;
+		static Scope<Scene> scene;
 
 	private:
 		Scope<Window> window;
+		ImGUILayer* imguiLayer;
 		static Scope<Application> instance;
 		bool running;
 		void Run();

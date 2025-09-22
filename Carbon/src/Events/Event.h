@@ -1,4 +1,5 @@
 #pragma once
+#include "cbpch.h"
 
 namespace Carbon 
 {
@@ -26,7 +27,7 @@ namespace Carbon
 		virtual EventType GetType() const = 0;
 		virtual const char* GetName() const = 0;
 		virtual int GetCategory() const = 0;
-		bool handled;
+		bool handled = false;
 	};
 
 	class EventDispatcher

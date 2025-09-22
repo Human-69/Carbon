@@ -28,11 +28,11 @@ ifeq ($(origin AR), default)
   AR = ar
 endif
 RESCOMP = windres
-INCLUDES += -I../Carbon/src -I../Carbon/src/Core -Isrc -I../vendor/glm/glm -I../vendor/include -I../Dependencies/GLEW/include -I../Dependencies/GLFW/include
+INCLUDES += -I../Carbon/src -I../Carbon/src/Core -Isrc -I../vendor/glm/glm -I../vendor/include -I../Dependencies/GLEW/include -I../Dependencies/GLFW/include -I../vendor -I../vendor/ImGUI
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-LIBS += -lCarbon -lglew32 -lglfw3 -lopengl32 -luser32 -lgdi32 -lshell32 -lkernel32
+LIBS += -lCarbon -lglew32 -lglfw3 -lImGui -lopengl32 -luser32 -lgdi32 -lshell32 -lkernel32
 LDDEPS +=
 LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
 define PREBUILDCMDS
@@ -49,7 +49,7 @@ OBJDIR = obj/Debug
 DEFINES += -DDEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O0 -g -m64 -w -Wfatal-errors
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -O0 -g -std=c++20 -m64 -w -Wfatal-errors
-ALL_LDFLAGS += $(LDFLAGS) -Llib -L../Dependencies/GLEW/lib/Release/x64 -L../Dependencies/GLFW/lib-g++ -m64
+ALL_LDFLAGS += $(LDFLAGS) -Llib -L../Dependencies/GLEW/lib/Release/x64 -L../vendor/ImGUI/bin/ImGui -L../Dependencies/GLFW/lib-g++ -m64
 
 else ifeq ($(config),release)
 TARGETDIR = ../x64/Release
@@ -58,7 +58,7 @@ OBJDIR = obj/Release
 DEFINES += -DNDEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -O2 -m64 -w -Wfatal-errors
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -O2 -std=c++20 -m64 -w -Wfatal-errors
-ALL_LDFLAGS += $(LDFLAGS) -Llib -L../Dependencies/GLEW/lib/Release/x64 -L../Dependencies/GLFW/lib-g++ -s -m64
+ALL_LDFLAGS += $(LDFLAGS) -Llib -L../Dependencies/GLEW/lib/Release/x64 -L../vendor/ImGUI/bin/ImGui -L../Dependencies/GLFW/lib-g++ -s -m64
 
 endif
 

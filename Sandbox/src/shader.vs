@@ -4,8 +4,11 @@ layout (location = 1) in vec2 auv;
 
 out vec2 uv;
 
+uniform mat4 pv;
+uniform mat4 model;
+
 void main()
 {
     uv = auv;
-    gl_Position = vec4(aPos, 1.0);
+    gl_Position = pv*model*vec4(aPos, 1.0);
 }

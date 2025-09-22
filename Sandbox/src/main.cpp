@@ -15,14 +15,16 @@ public:
 
 		std::vector<Carbon::Renderer::Vertex> vertices =
 		{
-			Carbon::Renderer::Vertex{Vector3{-0.5f, -0.5f, 0.f}, Vector2{0, 0}},
-			Carbon::Renderer::Vertex{Vector3{0.5f, -0.5f, 0.f}, Vector2{1, 0}},
-			Carbon::Renderer::Vertex{Vector3{0.f, 0.5f, 0.f}, Vector2{0.5, 1}},
+			Carbon::Renderer::Vertex{Vector3{-0.5f, -0.5f, 0.0f}, Vector2{1.0f, 0.0f}},
+			Carbon::Renderer::Vertex{Vector3{ 0.5f, -0.5f, 0.0f}, Vector2{0.0f, 0.0f}},
+			Carbon::Renderer::Vertex{Vector3{ 0.5f,  0.5f, 0.0f}, Vector2{0.0f, 1.0f}},
+			Carbon::Renderer::Vertex{Vector3{-0.5f,  0.5f, 0.0f}, Vector2{1.0f, 1.0f}},
 		};
 
-		std::vector<uint> indices = { 2, 1, 0 };
+		std::vector<uint> indices = { 2, 1, 0, 
+									  0, 3, 2};
 
-		m = CreateRef<Carbon::Renderer::Mesh>(vertices, indices, s);
+		Ref<Carbon::Renderer::Mesh> m = CreateRef<Carbon::Renderer::Mesh>(vertices, indices, s);
 
 		GL_FIND_ERROR();
 
@@ -39,16 +41,24 @@ public:
 		GL_FIND_ERROR();
 
 		Carbon::GL::RendererCommands::SetClearColor(Color{ 0.25, 0.25, 0.25, 1 });
+
+		auto& scene = Carbon::Application::GetActiveScene();
+		quad = scene.CreateEntity();
+		quad.AddComponent<Carbon::Transform>(Vector3{0, 0, 3});
+		quad.AddComponent<Carbon::MeshRenderer>(m);
 	};
 
 	virtual void OnDetach() override {};
 
+	virtual void OnImGUIRender() override 
+	{
+		ImGui::Begin("Cool window");
+		ImGui::Text("Hello guyz!");
+		ImGui::End();
+	};
+
 	virtual void OnUpdate() override 
 	{
-		Carbon::GL::RendererCommands::Clear();
-		
-		m->Render();
-
 		GL_FIND_ERROR();
 	};
 
@@ -59,7 +69,10 @@ public:
 			{
 				std::cout << "Pressed key: " << (char)kp.GetKeycode()<<"\n";
 				if (kp.GetKeycode() == 'W')
+				{
 					cam->fov += 5;
+					std::cout << "Pressed key W\n";
+				}
 				else if (kp.GetKeycode() == 'S')
 					cam->fov -= 5;
 				return true;
@@ -72,7 +85,8 @@ public:
 	};
 
 private:
-	Ref<Carbon::Renderer::Mesh> m;
+	Carbon::Entity quad;
+	
 };
 
 class SimpleApp : public Carbon::Application

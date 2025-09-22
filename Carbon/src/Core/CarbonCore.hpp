@@ -14,5 +14,11 @@
 /* Entry point */
 #include "EntryPoint.h"
 
+/* Scene */
+#include "Scene/Scene.h"
+
+/* ImGUI */
+#include "ImGUI/ImGUILayer.h"
+
 #include "CarbonTypes.h"
 #include "../GL/CarbonGL.hpp"

@@ -9,6 +9,7 @@ int main()
 {
 	std::cout << "Running!\n";
 	Carbon::Application::instance = CreateApplication("Carbon");
+	Carbon::Application::Get().imguiLayer->OnAttach();
 	Carbon::Application::Get().Run();
 	return 0;
 }

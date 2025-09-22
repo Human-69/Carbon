@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "cbpch.h"
 #include "../GL/RenderCommands.h"
+#include "Renderer.h"
 
 /* opengl */
 #include <GL/glew.h>
@@ -61,12 +62,5 @@ namespace Carbon::Renderer
 
 		VBO->SetData(vertices.data(), vertices.size() * sizeof(Vertex));
 		IBO->SetData(indices.data(), indices.size() * sizeof(uint));
-	}
-
-	void Mesh::Render()
-	{
-		shader->Bind();
-
-		GL::RendererCommands::DrawIndexed(VAO, indexCount);
 	}
 }

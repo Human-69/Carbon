@@ -7,9 +7,11 @@
 #include "../GL/Buffer.h"
 #include "../GL/VertexArray.h"
 
-
 namespace Carbon::Renderer
 {
+
+	class Renderer;
+
 	struct Vertex
 	{
 		Vector3 position;
@@ -34,16 +36,6 @@ namespace Carbon::Renderer
 		/// </summary>
 		void LoadData(const std::vector<Vertex>& vertices, const std::vector<uint>& indices);
 
-		/// <summary>
-		/// Renders at 0,0, 0 with no scaling and no rotation
-		/// </summary>
-		void Render();
-
-		/// <summary>
-		/// Renders the mesh according to the transform provided
-		/// </summary>
-		void Render(Matrix4 transform);
-
 		int vertexCount;
 		int indexCount;
 	private:
@@ -51,5 +43,7 @@ namespace Carbon::Renderer
 		Ref<GL::VertexArray> VAO;
 		Ref<GL::VertexBuffer> VBO;
 		Ref<GL::IndexBuffer> IBO;
+
+		friend class Carbon::Renderer::Renderer;
 	};
 }

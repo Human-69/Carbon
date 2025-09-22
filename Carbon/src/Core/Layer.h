@@ -12,6 +12,7 @@ namespace Carbon {
 		virtual void OnDetach() = 0;
 
 		virtual void OnUpdate() = 0;
+		virtual void OnImGUIRender() = 0;
 		virtual void OnEvent(Event& event) = 0;
 	};
 

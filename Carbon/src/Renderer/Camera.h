@@ -14,17 +14,14 @@ namespace Carbon::Renderer
 	class Camera
 	{
 	public:
-		Camera(float fov, float nearClipPlane, float farClipPlane, float aspect);
+		Camera(float fov, float nearClipPlane, float farClipPlane, float aspect) : fov(fov), nearClipPlane(nearClipPlane), farClipPlane(farClipPlane), aspectRatio(aspect) {};
 
-		/// <summary>
-		/// Carbon::GL::Camera::BegindDraw, prepares the scene to be drawn from this camera
-		/// </summary>
-		void BegindDraw();
-
-		/// <summary>
-		/// Finishes drawing to the screen, swaps buffers and polls events
-		/// </summary>
-		void EndDraw(Window& window);
+		Matrix4 GetProjectionView() const 
+		{
+			Matrix4 projection = glm::perspective(glm::radians(fov), aspectRatio, nearClipPlane, farClipPlane);
+			Matrix4 view = glm::lookAt(position, position + forward, up);
+			return projection * view;
+		}
 
 		Vector3 position = Vector3{ 0, 0, 0 };
 		float fov;

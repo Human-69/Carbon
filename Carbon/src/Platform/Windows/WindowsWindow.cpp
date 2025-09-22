@@ -90,7 +90,6 @@ namespace Carbon
 		return data.height;
 	}
 
-
 	void WindowsWindow::SwapBuffers()
 	{
 		context->SwapBuffers();

@@ -1,16 +1,20 @@
 #include "Application.h"
+#include "GL/RenderCommands.h"
 #include "GLFW/glfw3.h"
 
 namespace Carbon
 {
 
 	Scope<Application> Application::instance;
+	Scope<Scene> Application::scene = CreateScope<Scene>();;
 
 	Application::Application(const std::string name)
 	{
 		window = Window::Create(1920, 1080, name);
 		window->SetEventCallback([this](Event& e) { this->OnEvent(e); });
-		camera = CreateRef<Renderer::Camera>(60, 0.01, 100, 16.0f/9.0f);
+		camera = CreateRef<Renderer::Camera>(60, 0.01, 100, 16.0f / 9.0f);
+		imguiLayer = new ImGUILayer();
+		layerStack.PushLayer(imguiLayer);
 		running = true;
 	}
 
@@ -35,6 +39,7 @@ namespace Carbon
 			});
 
 		/* Input events */
+
 		//Input events are handled by layers
 		//The top most(last) layers receive events first
 		//Reverse iterate
@@ -52,8 +57,9 @@ namespace Carbon
 		{
 			Time::OnUpdate();
 			Input::OnBeginFrame();
+			Carbon::GL::RendererCommands::Clear();
 
-			camera->BegindDraw();
+			scene->OnUpdate(*camera);
 
 			//Top most layers(last) render last
 			//Forward iterate
@@ -61,6 +67,16 @@ namespace Carbon
 			{
 				layer->OnUpdate();
 			}
+
+			imguiLayer->Begin();
+
+			for(Layer* layer : layerStack)
+			{
+				layer->OnImGUIRender();
+			}
+
+			imguiLayer->End();
+
 			
 			window->OnUpdate();
 			Input::OnEndFrame();
