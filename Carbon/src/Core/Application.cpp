@@ -14,7 +14,7 @@ namespace Carbon
 		window->SetEventCallback([this](Event& e) { this->OnEvent(e); });
 		camera = CreateRef<Renderer::Camera>(60, 0.01, 100, 16.0f / 9.0f);
 		imguiLayer = new ImGUILayer();
-		layerStack.PushLayer(imguiLayer);
+		layerStack.PushOverlay(imguiLayer);
 		running = true;
 	}
 
@@ -61,18 +61,22 @@ namespace Carbon
 
 			scene->OnUpdate(*camera);
 
-			//Top most layers(last) render last
-			//Forward iterate
-			for (Layer* layer : layerStack)
-			{
-				layer->OnUpdate();
-			}
-
 			imguiLayer->Begin();
 
-			for(Layer* layer : layerStack)
+			//Top most layers(last) render last
+			//Forward iterate through normal layers
+			for(auto layerIdx = layerStack.begin(); layerIdx!=layerStack.beginOverlay(); ++layerIdx)
 			{
+				auto layer = *layerIdx;
+				layer->OnUpdate();
 				layer->OnImGUIRender();
+			}
+
+			for (auto overlayIdx = layerStack.beginOverlay(); overlayIdx != layerStack.end(); ++overlayIdx)
+			{
+				auto overlay = *overlayIdx;
+				overlay->OnUpdate();
+				overlay->OnImGUIRender();
 			}
 
 			imguiLayer->End();

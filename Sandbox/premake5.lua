@@ -19,7 +19,7 @@ project "Sandbox"
    filter "toolset:gcc or toolset:clang"
     buildoptions { "-w", "-Wfatal-errors" }
 
-   links {"Carbon", "glew32", "glfw3", "ImGui", "opengl32", "user32", "gdi32", "shell32", "kernel32" }
+   links {"Carbon", "ImGui", "glew32", "glfw3", "opengl32", "user32", "gdi32", "shell32", "kernel32" }
 
    filter "configurations:Debug"
       defines { "DEBUG" }

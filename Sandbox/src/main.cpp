@@ -11,7 +11,7 @@ class SimpleLayer : public Carbon::Layer
 public:
 	virtual void OnAttach() override
 	{
-		Ref<Carbon::GL::Shader> s = Carbon::GL::Shader::Create("D:\\Carbon\\Carbon\\Sandbox\\src\\shader.vs", "D:\\Carbon\\Carbon\\Sandbox\\src\\shader.fragmentShader");
+		s = Carbon::GL::Shader::Create("D:\\Carbon\\Carbon\\Sandbox\\src\\shader.vs", "D:\\Carbon\\Carbon\\Sandbox\\src\\shader.fragmentShader");
 
 		std::vector<Carbon::Renderer::Vertex> vertices =
 		{
@@ -46,6 +46,9 @@ public:
 		quad = scene.CreateEntity();
 		quad.AddComponent<Carbon::Transform>(Vector3{0, 0, 3});
 		quad.AddComponent<Carbon::MeshRenderer>(m);
+
+		input = new char[64];
+		input[0] = '\0';
 	};
 
 	virtual void OnDetach() override {};
@@ -53,7 +56,20 @@ public:
 	virtual void OnImGUIRender() override 
 	{
 		ImGui::Begin("Cool window");
-		ImGui::Text("Hello guyz!");
+	
+		if (ImGui::InputText("Texture path: ", input, 64, ImGuiInputTextFlags_EnterReturnsTrue)) 
+		{
+			std::string str = std::string(input);
+			Ref<Carbon::GL::Texture2D> t = Carbon::GL::Texture2D::Create(str);
+
+			GL_FIND_ERROR();
+
+			t->Bind(0);
+
+			GL_FIND_ERROR();
+
+			s->SetInt("tex", 0);
+		};
 		ImGui::End();
 	};
 
@@ -86,7 +102,8 @@ public:
 
 private:
 	Carbon::Entity quad;
-	
+	Ref<Carbon::GL::Shader> s;
+	char* input;
 };
 
 class SimpleApp : public Carbon::Application

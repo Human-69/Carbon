@@ -32,7 +32,7 @@ INCLUDES += -I../Carbon/src -I../Carbon/src/Core -Isrc -I../vendor/glm/glm -I../
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
-LIBS += -lCarbon -lglew32 -lglfw3 -lImGui -lopengl32 -luser32 -lgdi32 -lshell32 -lkernel32
+LIBS += -lCarbon -lImGui -lglew32 -lglfw3 -lopengl32 -luser32 -lgdi32 -lshell32 -lkernel32
 LDDEPS +=
 LINKCMD = $(CXX) -o "$@" $(OBJECTS) $(RESOURCES) $(ALL_LDFLAGS) $(LIBS)
 define PREBUILDCMDS

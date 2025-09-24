@@ -42,6 +42,8 @@ namespace Carbon::GL::OpenGL
 
 		unsigned char* data = stbi_load(path.c_str(), &specification.width, &specification.height, &bpp, 0);
 
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
 		switch(bpp)
 		{
 		case 1: specification.format = ImageFormat::R8; break;
