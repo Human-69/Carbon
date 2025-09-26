@@ -8,8 +8,6 @@
 
 namespace Carbon
 {
-
-
 	class Scene
 	{
 	public:
@@ -26,7 +24,7 @@ namespace Carbon
 		void OnUpdate(Renderer::Camera& mainCamera);
 	private:
 		entt::registry registry;
-		std::vector<std::tuple<OnCollisionFn, BoxCollider*, BoxCollider*>> collisionQueue;
+		std::vector<std::tuple<OnCollisionFn, Entity, Entity>> collisionQueue;
 		friend class Carbon::Entity;
 	};
 }

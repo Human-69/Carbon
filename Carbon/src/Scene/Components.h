@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cbpch.h"
+#include "Entity.h"
 
 namespace Carbon
 {
@@ -12,9 +13,10 @@ namespace Carbon
 
 	struct Transform
 	{
-		Transform(Vector3 position) : position(position) {};
+		Transform(Vector3 position, Vector3 size) : position(position), size(size) {};
 
 		Vector3 position;
+		Vector3 size;
 	};
 
 	struct MeshRenderer
@@ -27,7 +29,7 @@ namespace Carbon
 
 	struct BoxCollider;
 
-	typedef std::function<void(BoxCollider* colliderA, BoxCollider* colliderB)> OnCollisionFn;
+	typedef std::function<void(Entity colliderA, Entity colliderB)> OnCollisionFn;
 
 	struct BoxCollider
 	{

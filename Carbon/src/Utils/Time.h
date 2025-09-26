@@ -4,7 +4,7 @@
 namespace Carbon {
 	struct Timestep
 	{
-		Timestep(float currentTime, float deltatime) : deltatime(), elapsedTime(currentTime) {}
+		Timestep(float currentTime, float deltatime) : deltatime(deltatime), elapsedTime(currentTime) {}
 
 		float elapsedTime;
 		float deltatime;
@@ -34,9 +34,9 @@ namespace Carbon {
 		};
 
 		static Timestep GetTime() { return Timestep(t.GetElapsedTime(), deltatime); };
+		static float lastframetime;
+		static float deltatime;
 	private:
-		static inline float lastframetime;
-		static inline float deltatime;
-		static inline Timer t;
+		static Timer t;
 	};
 }

@@ -37,13 +37,13 @@ namespace Carbon
 				if(IsCollidingAABB(transform.position+boxCollider.offset, boxCollider.size, transform2.position+boxCollider2.offset, boxCollider2.size))
 				{
 					if (boxCollider.onCollision)
-						collisionQueue.push_back(std::make_tuple(boxCollider.onCollision, &boxCollider, &boxCollider2));
+						collisionQueue.push_back(std::make_tuple(boxCollider.onCollision, Entity(entity, &registry), Entity(entity2, &registry)));
 				}
 			}
 		}
 
-		for (auto& [collisonfn, boxColliderA, boxColliderB] : collisionQueue)
-			collisonfn(boxColliderA, boxColliderB);
+		for (auto& [collisonfn, e, e2] : collisionQueue)
+			collisonfn(e, e2);
 
 		collisionQueue.clear();
 
@@ -52,6 +52,7 @@ namespace Carbon
 		{
 			Matrix4 model = Matrix4(1);
 			model = glm::translate(model, transform.position);
+			model = glm::scale(model, transform.size);
 			Renderer::Renderer::RenderMesh(*renderer.mesh, model);
 		}
 	}

@@ -1,7 +1,14 @@
 #include <iostream>
 #include <Core/CarbonCore.hpp>
+#include <GLFW/glfw3.h>
 
 static Ref<Carbon::Renderer::Camera> cam;
+
+struct Velocity
+{
+	Velocity(Vector3 initialVelocity) : velocity(initialVelocity) {};
+	Vector3 velocity;
+};
 
 class SimpleLayer : public Carbon::Layer
 {
@@ -23,31 +30,24 @@ public:
 
 		mat = CreateRef<Carbon::Renderer::Material>();	
 
-		Ref<Carbon::Renderer::Mesh> m = CreateRef<Carbon::Renderer::Mesh>(vertices, indices, s);
-
-		GL_FIND_ERROR();
-
-		Ref<Carbon::GL::Texture2D> t = Carbon::GL::Texture2D::Create("D:\\Carbon\\Carbon\\Carbon\\res\\u like boys, don't you.jpg");
-
-		GL_FIND_ERROR();
-
-		mat->AddUniform("tex", t);
-		mat->SetMaterial(s);
-
-		GL_FIND_ERROR();
-
-		Carbon::GL::RendererCommands::SetClearColor(Color{ 0.25, 0.25, 0.25, 1 });
+		Ref<Carbon::Renderer::Mesh> square = CreateRef<Carbon::Renderer::Mesh>(vertices, indices, s);
 
 		auto& scene = Carbon::Application::GetActiveScene();
-		quad = scene.CreateEntity();
-		quad.AddComponent<Carbon::Transform>(Vector3{0, 0, 3});
-		quad.AddComponent<Carbon::MeshRenderer>(m, mat);
-		quad.AddComponent<Carbon::BoxCollider>(OnCollision, Vector3{0, 0, 0}, Vector3{1.0f, 1.0f, 1.0f});
+		paddle = scene.CreateEntity();
+		paddle.AddComponent<Carbon::Transform>(Vector3{ 2.95f, 0, 3 }, Vector3{0.25f, 0.75f, 1});
+		paddle.AddComponent<Carbon::MeshRenderer>(square, mat);
+		paddle.AddComponent<Carbon::BoxCollider>(OnCollision, Vector3{ 0, 0, 0 }, Vector3{ 0.25f, 0.75f, 1 });
 
-		quad2 = scene.CreateEntity();
-		quad2.AddComponent<Carbon::Transform>(Vector3{ 0, 0, 3 });
-		quad2.AddComponent<Carbon::MeshRenderer>(m, mat);
-		quad2.AddComponent<Carbon::BoxCollider>(OnCollision, Vector3{ 0, 0, 0 }, Vector3{ 1.0f, 1.0f, 1.0f });
+		paddle2 = scene.CreateEntity();
+		paddle2.AddComponent<Carbon::Transform>(Vector3{ -2.95f, 0, 3 }, Vector3{ 0.25f, 0.75f, 1 });
+		paddle2.AddComponent<Carbon::MeshRenderer>(square, mat);
+		paddle2.AddComponent<Carbon::BoxCollider>(OnCollision, Vector3{ 0, 0, 0 }, Vector3{ 0.25f, 0.75f, 1 });
+
+		ball = scene.CreateEntity();
+		ball.AddComponent<Carbon::Transform>(Vector3{ 1.5f, 0, 3 }, Vector3{ 0.2f, 0.2f, 0.2f });
+		ball.AddComponent<Carbon::MeshRenderer>(square, mat);
+		ball.AddComponent<Carbon::BoxCollider>(OnCollision, Vector3{ 0, 0, 0 }, Vector3{ 0.2f, 0.2f, 0.2f });
+		ball.AddComponent<Velocity>(glm::normalize(Vector3{0.5f, 0.5f, 0}));
 
 		input = new char[64];
 		input[0] = '\0';
@@ -58,31 +58,39 @@ public:
 	virtual void OnImGUIRender() override 
 	{
 		ImGui::Begin("Cool window");
-	
-		if (ImGui::InputText("Texture path: ", input, 64, ImGuiInputTextFlags_EnterReturnsTrue)) 
-		{
-			std::string str = std::string(input);
-			Ref<Carbon::GL::Texture2D> t = Carbon::GL::Texture2D::Create(str);
-
-			mat->SetUniform("tex", t);
-			mat->SetMaterial(s);
-		};
 
 		ImGui::Text("Colliding: %s", quadsColliding ? "true" : "false");
 
+		ImGui::Text("Deltatime: %f\nElapsed time: %f\nLast frame elapsed time: %f", Carbon::Time::GetTime().deltatime, Carbon::Time::GetTime().elapsedTime, Carbon::Time::lastframetime);
+
+		ImGui::Text("Score player A(left) - %d", scorePlayerA);
+
+		ImGui::Text("Score player B(right) - %d", scorePlayerB);
+
 		quadsColliding = false;
 
-		float* pos = new float[3];
-		pos[0] = quad2.GetComponent<Carbon::Transform>().position.x;
-		pos[1] = quad2.GetComponent<Carbon::Transform>().position.y;
-		pos[2] = quad2.GetComponent<Carbon::Transform>().position.z;
+		float* paddleDims = new float[3];
+		paddleDims[0] = paddle2.GetComponent<Carbon::Transform>().size.x;
+		paddleDims[1] = paddle2.GetComponent<Carbon::Transform>().size.y;
+		paddleDims[2] = paddle2.GetComponent<Carbon::Transform>().size.z;
 
-		if(ImGui::InputFloat3("Quad2 position: ", pos, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+		if (ImGui::InputFloat3("Paddle dims: ", paddleDims, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
 		{
-			quad2.GetComponent<Carbon::Transform>().position = Vector3{ pos[0], pos[1], pos[2] };
+			paddle.GetComponent<Carbon::Transform>().size = Vector3{ paddleDims[0], paddleDims[1], paddleDims[2] };
+			paddle2.GetComponent<Carbon::Transform>().size = Vector3{ paddleDims[0], paddleDims[1], paddleDims[2] };
 		}
 
-		delete pos;
+		float* ballsize = new float[1];
+		ballsize[0] = ball.GetComponent<Carbon::Transform>().size.x;
+
+		if (ImGui::InputFloat("Ball size: ", ballsize, 0.f, 0.f, "%.6f", ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			ball.GetComponent<Carbon::Transform>().size = Vector3{*ballsize, *ballsize, *ballsize};
+		}
+
+		ImGui::InputFloat("Ball speed: ", &ballSpeed, 0.f, 0.f, "%.6f");
+
+		ImGui::SliderFloat("Paddle speed: ", &paddleSpeed, 0.0f, 10.0f, "%.5f");
 
 		ImGui::End();
 	};
@@ -90,42 +98,68 @@ public:
 	virtual void OnUpdate() override 
 	{
 		GL_FIND_ERROR();
+
+		if (Carbon::Input::GetKeyDown(GLFW_KEY_UP))
+			paddle2.GetComponent<Carbon::Transform>().position.y += Carbon::Time::GetTime().deltatime * paddleSpeed;
+
+		if (Carbon::Input::GetKeyDown(GLFW_KEY_DOWN))
+			paddle2.GetComponent<Carbon::Transform>().position.y -= Carbon::Time::GetTime().deltatime * paddleSpeed;
+
+
+		if (Carbon::Input::GetKeyDown(GLFW_KEY_W))
+			paddle.GetComponent<Carbon::Transform>().position.y += Carbon::Time::GetTime().deltatime * paddleSpeed;
+
+		if (Carbon::Input::GetKeyDown(GLFW_KEY_S))
+			paddle.GetComponent<Carbon::Transform>().position.y -= Carbon::Time::GetTime().deltatime * paddleSpeed;
+
+		Carbon::Transform& ballTransform = ball.GetComponent<Carbon::Transform>();
+		Velocity& ballVelocity = ball.GetComponent<Velocity>();
+
+		ballTransform.position += ballVelocity.velocity * ballSpeed * Carbon::Time::GetTime().deltatime;
+
+		if (ballTransform.position.x < -3.077f || ballTransform.position.x > 3.077f)
+		{
+			if (ballVelocity.velocity.x < 0)
+				scorePlayerA++;
+			else if (ballVelocity.velocity.x > 0)
+				scorePlayerB++;
+			ballTransform.position.x = 0;
+			ballTransform.position.y = 0;
+			ballVelocity.velocity.x = -ballVelocity.velocity.x;
+		}
+		if (ballTransform.position.y < -1.732f || ballTransform.position.y > 1.732f) 
+		{
+			ballVelocity.velocity.y = -ballVelocity.velocity.y;
+		}
 	};
 
 	virtual void OnEvent(Carbon::Event& e) override 
 	{
-		Carbon::EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<Carbon::KeyPressed>([this](Carbon::KeyPressed& kp)
-			{
-				std::cout << "Pressed key: " << (char)kp.GetKeycode()<<"\n";
-				if (kp.GetKeycode() == 'W')
-				{
-					cam->fov += 5;
-					std::cout << "Pressed key W\n";
-				}
-				else if (kp.GetKeycode() == 'S')
-					cam->fov -= 5;
-				return true;
-			});
-		dispatcher.Dispatch<Carbon::KeyReleased>([this](Carbon::KeyReleased& kr)
-			{
-				std::cout << "Released key: " << (char)kr.GetKeycode() << "\n";
-				return true;
-			});
+
 	};
 
-	static void OnCollision(Carbon::BoxCollider* A, Carbon::BoxCollider* B)
+	static void OnCollision(Carbon::Entity A, Carbon::Entity B)
 	{
-		quadsColliding = true;
+		if(A == ball && (B == paddle || B == paddle2))
+		{
+			A.GetComponent<Velocity>().velocity.x *= -1;
+		}
+		
 	}
 
 private:
-	Carbon::Entity quad;
-	Carbon::Entity quad2;
+	static inline Carbon::Entity paddle;
+	static inline Carbon::Entity paddle2;
+	static inline Carbon::Entity ball;
+
 	Ref<Carbon::GL::Shader> s;
 	Ref<Carbon::Renderer::Material> mat;
 	inline static bool quadsColliding = false;
+	int scorePlayerA;
+	int scorePlayerB;
 	char* input;
+	float paddleSpeed = 1.5f;
+	float ballSpeed = 1.0f;
 };
 
 class SimpleApp : public Carbon::Application
