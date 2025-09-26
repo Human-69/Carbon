@@ -47,6 +47,11 @@ namespace Carbon
 			registry->remove<T>(entity);
 		}
 
+		bool operator==(const Entity& other)
+		{
+			return entity == other.entity;
+		}
+
 
 	private:
 		Entity(entt::entity entity, entt::registry* registry) : entity(entity), registry(registry) {};

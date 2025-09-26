@@ -1,8 +1,5 @@
 #include <iostream>
 #include <Core/CarbonCore.hpp>
-#include <Renderer/Mesh.h>
-#include <Platform/Windows/WindowsWindow.h>
-#include "Platform/OpenGL/OpenGLTexture.h"
 
 static Ref<Carbon::Renderer::Camera> cam;
 
@@ -24,6 +21,8 @@ public:
 		std::vector<uint> indices = { 2, 1, 0, 
 									  0, 3, 2};
 
+		mat = CreateRef<Carbon::Renderer::Material>();	
+
 		Ref<Carbon::Renderer::Mesh> m = CreateRef<Carbon::Renderer::Mesh>(vertices, indices, s);
 
 		GL_FIND_ERROR();
@@ -32,11 +31,8 @@ public:
 
 		GL_FIND_ERROR();
 
-		t->Bind(0);
-
-		GL_FIND_ERROR();
-
-		s->SetInt("tex", 0);
+		mat->AddUniform("tex", t);
+		mat->SetMaterial(s);
 
 		GL_FIND_ERROR();
 
@@ -45,7 +41,13 @@ public:
 		auto& scene = Carbon::Application::GetActiveScene();
 		quad = scene.CreateEntity();
 		quad.AddComponent<Carbon::Transform>(Vector3{0, 0, 3});
-		quad.AddComponent<Carbon::MeshRenderer>(m);
+		quad.AddComponent<Carbon::MeshRenderer>(m, mat);
+		quad.AddComponent<Carbon::BoxCollider>(OnCollision, Vector3{0, 0, 0}, Vector3{1.0f, 1.0f, 1.0f});
+
+		quad2 = scene.CreateEntity();
+		quad2.AddComponent<Carbon::Transform>(Vector3{ 0, 0, 3 });
+		quad2.AddComponent<Carbon::MeshRenderer>(m, mat);
+		quad2.AddComponent<Carbon::BoxCollider>(OnCollision, Vector3{ 0, 0, 0 }, Vector3{ 1.0f, 1.0f, 1.0f });
 
 		input = new char[64];
 		input[0] = '\0';
@@ -62,14 +64,26 @@ public:
 			std::string str = std::string(input);
 			Ref<Carbon::GL::Texture2D> t = Carbon::GL::Texture2D::Create(str);
 
-			GL_FIND_ERROR();
-
-			t->Bind(0);
-
-			GL_FIND_ERROR();
-
-			s->SetInt("tex", 0);
+			mat->SetUniform("tex", t);
+			mat->SetMaterial(s);
 		};
+
+		ImGui::Text("Colliding: %s", quadsColliding ? "true" : "false");
+
+		quadsColliding = false;
+
+		float* pos = new float[3];
+		pos[0] = quad2.GetComponent<Carbon::Transform>().position.x;
+		pos[1] = quad2.GetComponent<Carbon::Transform>().position.y;
+		pos[2] = quad2.GetComponent<Carbon::Transform>().position.z;
+
+		if(ImGui::InputFloat3("Quad2 position: ", pos, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+			quad2.GetComponent<Carbon::Transform>().position = Vector3{ pos[0], pos[1], pos[2] };
+		}
+
+		delete pos;
+
 		ImGui::End();
 	};
 
@@ -100,9 +114,17 @@ public:
 			});
 	};
 
+	static void OnCollision(Carbon::BoxCollider* A, Carbon::BoxCollider* B)
+	{
+		quadsColliding = true;
+	}
+
 private:
 	Carbon::Entity quad;
+	Carbon::Entity quad2;
 	Ref<Carbon::GL::Shader> s;
+	Ref<Carbon::Renderer::Material> mat;
+	inline static bool quadsColliding = false;
 	char* input;
 };
 

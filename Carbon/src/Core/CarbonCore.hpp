@@ -22,3 +22,4 @@
 
 #include "CarbonTypes.h"
 #include "../GL/CarbonGL.hpp"
+#include "../Renderer/CarbonRenderer.h"

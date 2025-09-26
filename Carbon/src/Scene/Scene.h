@@ -1,5 +1,6 @@
 #pragma once
 #include "cbpch.h"
+#include <tuple>
 #include "Renderer/Mesh.h"
 #include "Entity.h"
 #include "Components.h"
@@ -7,6 +8,8 @@
 
 namespace Carbon
 {
+
+
 	class Scene
 	{
 	public:
@@ -23,6 +26,7 @@ namespace Carbon
 		void OnUpdate(Renderer::Camera& mainCamera);
 	private:
 		entt::registry registry;
+		std::vector<std::tuple<OnCollisionFn, BoxCollider*, BoxCollider*>> collisionQueue;
 		friend class Carbon::Entity;
 	};
 }

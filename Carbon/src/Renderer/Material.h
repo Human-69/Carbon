@@ -7,6 +7,7 @@
 
 /* carbon */
 #include "../GL/Texture.h"
+#include "../GL/Shader.h"
 
 
 namespace Carbon::Renderer {
@@ -24,6 +25,8 @@ namespace Carbon::Renderer {
 
 		UniformValue GetUniform(const std::string& uniformName);
 		void RemoveUniform(const std::string& uniformName);
+
+		void SetMaterial(Ref<GL::Shader> shader);
 	private:
 		std::unordered_map<std::string, UniformValue> params;
 		friend class Shader;
