@@ -18,3 +18,4 @@
 #include <gtx/normal.hpp>
 
 #include "cb_assert.h"
+#include "CarbonTypes.h"

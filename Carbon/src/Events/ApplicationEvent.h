@@ -32,6 +32,8 @@ namespace Carbon
 	{
 	public:
 
+		WindowResizeEvent(int width, int height) : width(width), height(height) {};
+
 		int GetWidth() const { return width; }
 		int GetHeight() const { return height; }
 

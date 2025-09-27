@@ -1,77 +1,137 @@
 #pragma once
-#include "Types.h"
 
-/* opengl */
-#include <GL/glew.h>
+#include <vector>
+#include <CarbonTypes.h>
+#include <cb_assert.h>
+#include <string>
 
 namespace Carbon::GL
 {
-	/// <summary>
-	/// A buffer for GPU data
-	/// </summary>
-	template<typename T>
-	class Buffer
+	enum class VertexBufferDatatype
+	{
+		None,
+		Int, 
+		Int2,
+		Int3,
+		Int4,
+		Float,
+		Float2,
+		Float3,
+		Float4,
+		Mat3,
+		Mat4,
+		Bool,
+	};
+
+	static uint GetDatatypeSize(VertexBufferDatatype datatype)
+	{
+		switch (datatype)
+		{
+		case VertexBufferDatatype::Int: return 4;
+		case VertexBufferDatatype::Int2: return 4 * 2;
+		case VertexBufferDatatype::Int3: return 4 * 3;
+		case VertexBufferDatatype::Int4: return 4 * 4;
+			
+		case VertexBufferDatatype::Float: return 4;
+		case VertexBufferDatatype::Float2: return 4 * 2;
+		case VertexBufferDatatype::Float3: return 4 * 3;
+		case VertexBufferDatatype::Float4: return 4 * 4;
+
+		case VertexBufferDatatype::Mat3: return 4 * 3 * 3;
+		case VertexBufferDatatype::Mat4: return 4 * 4 * 4;
+
+		case VertexBufferDatatype::Bool: return 1;
+		}
+
+		CB_ASSERT_MSG(false, "Unknown datatype!");
+	}
+
+	struct BufferElement
+	{
+		std::string name;
+		VertexBufferDatatype type;
+		uint size;
+		uint offset;
+		bool normalized;
+
+		uint GetElementCount() const
+		{
+			switch (type)
+			{
+			case VertexBufferDatatype::Int: return 1;
+			case VertexBufferDatatype::Int2: return 2;
+			case VertexBufferDatatype::Int3: return 3;
+			case VertexBufferDatatype::Int4: return 4;
+
+			case VertexBufferDatatype::Float: return 1;
+			case VertexBufferDatatype::Float2: return 2;
+			case VertexBufferDatatype::Float3: return 3;
+			case VertexBufferDatatype::Float4: return 4;
+
+			case VertexBufferDatatype::Mat3: return 3;
+			case VertexBufferDatatype::Mat4: return 4;
+
+			case VertexBufferDatatype::Bool: return 1;
+			}
+
+			CB_ASSERT_MSG(false, "Unknown datatype!");
+		}
+
+		BufferElement(VertexBufferDatatype datatype, const std::string& name, bool normalized = false) : type(datatype), size(GetDatatypeSize(datatype)), offset(0), name(name), normalized(normalized) {};
+	};
+
+	class BufferLayout
 	{
 	public:
-		Buffer(uint target, std::vector<T> data) : target(target), elementSize(sizeof(T))
-		{
-			glGenBuffers(1, &handle);
-			glBindBuffer(target, handle);
-			glBufferData(target, elementSize * data.size(), data.data(), GL_STATIC_DRAW);
-			glBindBuffer(target, 0);
-		}
+		BufferLayout(std::initializer_list<BufferElement> elements) : elements(elements) { CalculateOffsetAndStride(); };
+		BufferLayout() = default;
 
-		Buffer(uint target, int numElements) : target(target), elementSize(sizeof(T))
-		{
-			glGenBuffers(1, &handle);
-			glBindBuffer(target, handle);
-			glBufferData(target, elementSize * numElements, NULL, GL_STATIC_DRAW);
-			glBindBuffer(target, 0);
-		}
+		uint GetStride() const { return stride; }
 
-		Buffer(uint target) : target(target), elementSize(sizeof(T))
-		{
-			glGenBuffers(1, &handle);
-			glBindBuffer(target, handle);
-			glBindBuffer(target, 0);
-		}
-
-		Buffer() : elementSize(sizeof(T))
-		{
-			glGenBuffers(1, &handle);
-		}
-
-		void SetData(std::vector<T> data)
-		{
-			Bind();
-			glBufferData(target, elementSize * data.size(), data.data(), GL_STATIC_DRAW);
-			Unbind();
-		}
-
-		template<typename U = T, typename Member, typename std::enable_if<std::is_class<U>::value || std::is_union<T>::value, int>::type = 0>
-		
-		void AddAttribPointer(Member U::* member, int count, GLenum type)
-		{
-			Bind();
-			glVertexAttribPointer(vertexAtrribIndex, count, type, GL_FALSE, elementSize, reinterpret_cast<const void*>(&(reinterpret_cast<U*>(0)->*member)));
-			glEnableVertexAttribArray(vertexAtrribIndex++);
-			Unbind();
-		}
-
-		void Bind()
-		{
-			glBindBuffer(target, handle);
-		}
-
-		void Unbind()
-		{
-			glBindBuffer(target, 0);
-		}
+		const std::vector<BufferElement>& GetBufferElements() const { return elements; }
 
 	private:
-		uint handle;
-		uint target;
-		uint elementSize;
-		uint vertexAtrribIndex = 0;
+
+		void CalculateOffsetAndStride()
+		{
+			int offset = 0;
+			stride = 0;
+			for(auto& element : elements)
+			{
+				element.offset = offset;
+				offset += element.size;
+				stride += element.size;
+			}
+		}
+		
+		uint stride;
+		std::vector<BufferElement> elements;
+	};
+
+	class VertexBuffer
+	{
+	public:
+
+		virtual void Bind() = 0;
+		virtual void Unbind() = 0;
+
+		virtual void SetData(const void* data, uint size) = 0;
+
+		virtual const BufferLayout& GetLayout() const = 0;
+		virtual void SetLayout(const BufferLayout& bufferLayout) = 0;
+
+		static Ref<VertexBuffer> Create(uint size);
+		static Ref<VertexBuffer> Create(float* vertices, uint size);
+	};
+
+	class IndexBuffer
+	{
+	public:
+		virtual void Bind() = 0;
+		virtual void Unbind() = 0;
+
+		virtual void SetData(const uint* data, uint size) = 0;
+
+		static Ref<IndexBuffer> Create(uint* indices, uint size);
 	};
 }

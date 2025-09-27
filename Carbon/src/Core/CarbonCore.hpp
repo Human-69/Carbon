@@ -7,3 +7,19 @@
 
 /* Windowing */
 #include "Window.h"
+
+/* Application */
+#include "Application.h"
+
+/* Entry point */
+#include "EntryPoint.h"
+
+/* Scene */
+#include "Scene/Scene.h"
+
+/* ImGUI */
+#include "ImGUI/ImGUILayer.h"
+
+#include "CarbonTypes.h"
+#include "../GL/CarbonGL.hpp"
+#include "../Renderer/CarbonRenderer.h"
