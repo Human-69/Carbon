@@ -20,3 +20,6 @@ vendor/glm/CMakeLists.txt
 vendor/glm/test/
 /Sandbox/lib
 Sandbox/lib/Carbon.lib
+*.filters
+*.user
+*.vcxproj
