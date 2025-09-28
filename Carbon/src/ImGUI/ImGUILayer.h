@@ -2,9 +2,9 @@
 
 #include "Layer.h"
 
-#include <ImGUI/imgui.h>
-#include <ImGUI/imgui_internal.h>
-#include <ImGUI/misc/cpp/imgui_stdlib.h>
+#include <imgui.h>
+#include <imgui_internal.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_glfw.h>

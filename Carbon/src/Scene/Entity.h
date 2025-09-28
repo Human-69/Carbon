@@ -47,7 +47,7 @@ namespace Carbon
 			registry->remove<T>(entity);
 		}
 
-		bool operator==(const Entity& other)
+		bool operator==(const Entity& other) const
 		{
 			return entity == other.entity;
 		}
