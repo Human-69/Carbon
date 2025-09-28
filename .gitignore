@@ -23,3 +23,5 @@ Sandbox/lib/Carbon.lib
 *.filters
 *.user
 *.vcxproj
+*.sln
+Run.bat
