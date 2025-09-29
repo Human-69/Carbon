@@ -16,10 +16,6 @@ project "Carbon"
 
    defines {"CARBON"}
 
-   filter { "system:windows", "action:gmake" }
-      buildoptions { "-m64" }
-      linkoptions  { "-m64" }
-
    filter "system:windows"
       defines {"PLATFORM_WINDOWS"}
 
@@ -42,11 +38,6 @@ project "Sandbox"
    includedirs {"Carbon/src", "Carbon/src/Core", "Sandbox/src", "vendor/glm/glm", "vendor/include", "Dependencies/GLEW/include", "Dependencies/GLFW/include", "vendor",  "Dependencies/ImGui" }
    libdirs { "bin/%{cfg.buildcfg}", "Dependencies/GLEW/lib/Release/x64", "Dependencies/ImGui/bin/ImGui/%{cfg.buildcfg}" }
    links {"Carbon", "ImGui", "glew32", "glfw3", "opengl32" }
-
-   filter { "system:windows", "action:gmake" }
-      buildoptions { "-m64" }
-      linkoptions  { "-m64" }
-      libdirs {"Dependencies/GLFW/lib-mingw-w64"}
 
    filter { "action:vs2022" }
       libdirs {"Dependencies/GLFW/lib-vc2022"}
